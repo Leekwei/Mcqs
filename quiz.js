@@ -193,229 +193,219 @@ var SETS = {
 
 // ─── RUNTIME STATE ────────────────────────────────────────────────────────────
 
-var QUESTIONS = [];
-var current = 0;
-var answers = [];
-var timerInterval = null;
-var timeLeft = 3600;
-var quizFinished = false;
-
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-  }
-  return a;
-}
-
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-function formatTime(s) {
-  var h = Math.floor(s / 3600);
-  var m = Math.floor((s % 3600) / 60);
-  var sec = s % 60;
-  return pad(h) + ':' + pad(m) + ':' + pad(sec);
-}
-
-function startTimer() {
-  timeLeft = 3600;
-  quizFinished = false;
-  document.getElementById('timer').textContent = formatTime(timeLeft);
-  document.getElementById('timer').style.color = 'var(--accent)';
-  clearInterval(timerInterval);
-  timerInterval = setInterval(function() {
-    if (quizFinished) { clearInterval(timerInterval); return; }
-    timeLeft--;
-    document.getElementById('timer').textContent = formatTime(timeLeft);
-    if (timeLeft <= 300) document.getElementById('timer').style.color = 'var(--warn)';
-    if (timeLeft <= 60) document.getElementById('timer').style.color = 'var(--danger)';
-    if (timeLeft <= 0) { clearInterval(timerInterval); showResults(true); }
-  }, 1000);
-}
-
-function startQuiz(setNum) {
-  QUESTIONS = shuffle(SETS[setNum]);
-  current = 0;
-  answers = new Array(60).fill(null);
-  quizFinished = false;
-  showScreen('quiz-screen');
-  document.getElementById('quiz-header').style.display = 'flex';
-  document.getElementById('set-badge').textContent = 'Set ' + setNum;
-  startTimer();
-  renderQuestion();
-}
-
-function goToStart() {
-  clearInterval(timerInterval);
-  quizFinished = true;
-  showScreen('start-screen');
-  document.getElementById('quiz-header').style.display = 'none';
-}
-
-function showScreen(id) {
-  var screens = document.querySelectorAll('.screen');
-  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
-  document.getElementById(id).classList.add('active');
-}
-
-function renderQuestion() {
-  var q = QUESTIONS[current];
-  document.getElementById('q-tag').textContent = q.topic;
-  document.getElementById('q-num').textContent = 'Question ' + (current + 1) + ' of 60';
-  document.getElementById('q-text').textContent = q.q;
-
-  var optsEl = document.getElementById('options');
-  optsEl.innerHTML = '';
-  var letters = ['A','B','C','D'];
-  for (var i = 0; i < q.opts.length; i++) {
-    var btn = document.createElement('button');
-    btn.className = 'opt';
-    btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + q.opts[i] + '</span>';
-    btn.setAttribute('data-index', i);
-    btn.addEventListener('click', handleOptionClick);
-    optsEl.appendChild(btn);
-  }
-
-  var expEl = document.getElementById('explanation');
-  expEl.classList.remove('show');
-  expEl.innerHTML = '';
-
-  var btnNext = document.getElementById('btn-next');
-  btnNext.classList.remove('show');
-  btnNext.textContent = (current < 59) ? 'Next' : 'Finish & See Results';
-
-  document.getElementById('btn-prev').disabled = (current === 0);
-
-  if (answers[current] !== null) applyAnswerState(answers[current]);
-  updateProgress();
-}
-
-function handleOptionClick(e) {
-  var idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
-  selectAnswer(idx);
-}
-
-function selectAnswer(i) {
-  if (answers[current] !== null) return;
-  answers[current] = i;
-  applyAnswerState(i);
-}
-
-function applyAnswerState(chosen) {
-  var q = QUESTIONS[current];
-  var opts = document.querySelectorAll('.opt');
-  for (var i = 0; i < opts.length; i++) {
-    opts[i].setAttribute('disabled', 'disabled');
-    if (i === q.ans) opts[i].classList.add('correct');
-    else if (i === chosen && chosen !== q.ans) opts[i].classList.add('wrong');
-  }
-  var expEl = document.getElementById('explanation');
-  expEl.innerHTML = '<strong>' + (chosen === q.ans ? 'Correct!' : 'Incorrect.') + '</strong> ' + q.exp;
-  expEl.classList.add('show');
-  document.getElementById('btn-next').classList.add('show');
-}
-
-function nextOrFinish() {
-  if (current < 59) { current++; renderQuestion(); }
-  else showResults(false);
-}
-
-function goTo(n) {
-  if (n < 0 || n >= 60) return;
-  current = n;
-  renderQuestion();
-}
-
-function updateProgress() {
-  var answered = 0;
-  for (var i = 0; i < answers.length; i++) if (answers[i] !== null) answered++;
-  document.getElementById('progress-bar').style.width = ((answered / 60) * 100) + '%';
-  document.getElementById('progress-label').textContent = answered + ' / 60';
-}
-
-function showResults(timedOut) {
-  clearInterval(timerInterval);
-  quizFinished = true;
-  showScreen('result-screen');
-  document.getElementById('quiz-header').style.display = 'none';
-
-  var correct = 0, wrong = 0, skip = 0;
-  for (var i = 0; i < 60; i++) {
-    if (answers[i] === null) skip++;
-    else if (answers[i] === QUESTIONS[i].ans) correct++;
-    else wrong++;
-  }
-
-  var pct = Math.round((correct / 60) * 100);
-  document.getElementById('score-pct').textContent = pct + '%';
-  document.getElementById('res-correct').textContent = correct;
-  document.getElementById('res-wrong').textContent = wrong;
-  document.getElementById('res-skip').textContent = skip;
-
-  var title = timedOut ? 'Time Up!' : (pct >= 70 ? 'Well Done!' : pct >= 50 ? 'Good Effort' : 'Keep Practising');
-  document.getElementById('result-title').textContent = title;
-
-  var verdict;
-  if (timedOut) verdict = 'Time ran out. Review your answers below and work on your speed.';
-  else if (pct >= 80) verdict = 'Outstanding - you are well prepared for Gottingen.';
-  else if (pct >= 65) verdict = 'Solid performance. Review your weak areas and you will be ready.';
-  else if (pct >= 50) verdict = 'A decent start. Focus on the topics where you missed questions.';
-  else verdict = 'Do not worry - use the explanations below to guide your revision.';
-  document.getElementById('verdict').textContent = verdict;
-
-  var circ = 2 * Math.PI * 55;
-  var offset = circ * (1 - pct / 100);
-  setTimeout(function() {
-    var ring = document.getElementById('ring-fill');
-    ring.style.strokeDashoffset = offset;
-    ring.style.stroke = pct >= 70 ? 'var(--accent2)' : pct >= 50 ? 'var(--warn)' : 'var(--danger)';
-  }, 100);
-
-  // Topic breakdown
-  var topics = [];
-  for (var i = 0; i < QUESTIONS.length; i++) {
-    if (topics.indexOf(QUESTIONS[i].topic) === -1) topics.push(QUESTIONS[i].topic);
-  }
-  var tbHtml = '<h3>Performance by Topic</h3>';
-  for (var t = 0; t < topics.length; t++) {
-    var tot = 0, cor = 0;
-    for (var i = 0; i < QUESTIONS.length; i++) {
-      if (QUESTIONS[i].topic === topics[t]) { tot++; if (answers[i] === QUESTIONS[i].ans) cor++; }
+// quiz-app runtime (expects SETS to be defined earlier in the file)
+(function () {
+  // Utility: Fisher-Yates shuffle
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    var frac = tot > 0 ? cor / tot : 0;
-    var bc = frac >= 0.7 ? 'var(--accent2)' : frac >= 0.5 ? 'var(--warn)' : 'var(--danger)';
-    tbHtml += '<div class="tb-row"><div class="tb-name">' + topics[t] + '</div><div class="tb-bar-outer"><div class="tb-bar-inner" style="width:' + (frac*100) + '%;background:' + bc + '"></div></div><div class="tb-frac">' + cor + '/' + tot + '</div></div>';
+    return arr;
   }
-  document.getElementById('topic-breakdown').innerHTML = tbHtml;
 
-  // Full review
-  var letters = ['A','B','C','D'];
-  var revHtml = '<h3>Full Question Review</h3>';
-  for (var i = 0; i < 60; i++) {
-    var q = QUESTIONS[i];
-    var ua = answers[i];
-    var ok = (ua === q.ans);
-    var sk = (ua === null);
-    var sc = sk ? 'review-skip' : (ok ? 'review-correct' : 'review-wrong');
-    var sl = sk ? 'Skipped' : (ok ? 'Correct' : 'Wrong');
-    revHtml += '<div class="review-item ' + sc + '">';
-    revHtml += '<div class="review-header"><span class="review-qnum">Q' + (i+1) + ' &bull; ' + q.topic + '</span><span class="review-status">' + sl + '</span></div>';
-    revHtml += '<div class="review-question">' + q.q + '</div><div class="review-opts">';
-    for (var j = 0; j < q.opts.length; j++) {
-      var oc = (j === q.ans) ? 'rev-opt-correct' : ((j === ua && !ok) ? 'rev-opt-wrong' : '');
-      revHtml += '<div class="rev-opt ' + oc + '"><span class="rev-letter">' + letters[j] + '</span>' + q.opts[j] + '</div>';
+  // Shuffle options of a single question and remap the correct answer index
+  function shuffleQuestionOptions(q) {
+    // create pairs [optText, originalIndex]
+    const pairs = q.opts.map((text, idx) => ({ text, idx }));
+    shuffleArray(pairs);
+    // build new opts array and find new index of original answer
+    q.opts = pairs.map(p => p.text);
+    const newAnsIndex = pairs.findIndex(p => p.idx === q.ans);
+    q.ans = newAnsIndex;
+    return q;
+  }
+
+  // Shuffle question order and options for the entire set
+  function prepareQuestions(setArray) {
+    const copy = JSON.parse(JSON.stringify(setArray)); // deep copy to avoid mutating original SETS
+    shuffleArray(copy);
+    copy.forEach(q => shuffleQuestionOptions(q));
+    return copy;
+  }
+
+  // DOM references
+  const qTag = document.getElementById('q-tag');
+  const qNum = document.getElementById('q-num');
+  const qText = document.getElementById('q-text');
+  const optionsWrap = document.getElementById('options');
+  const explanationEl = document.getElementById('explanation');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const btnSkip = document.getElementById('btn-skip');
+  const progressBar = document.getElementById('progress-bar');
+  const progressLabel = document.getElementById('progress-label');
+
+  // App state
+  let currentSetId = null;
+  let questions = [];
+  let curIndex = 0;
+  let responses = []; // { selected: number|null, status: 'answered'|'skipped'|'unseen' }
+
+  // Start a set (call this where you originally call start)
+  function startSet(setId) {
+    currentSetId = setId;
+    const raw = SETS[setId];
+    questions = prepareQuestions(raw);
+    curIndex = 0;
+    responses = Array(questions.length).fill(null).map(() => ({ selected: null, status: 'unseen' }));
+    renderQuestion();
+    updateNav();
+    // show quiz header if hidden
+    const quizHeader = document.getElementById('quiz-header');
+    if (quizHeader) quizHeader.style.display = '';
+    // show quiz screen (if your UI needs)
+    document.getElementById('start-screen').classList.remove('active');
+    document.getElementById('quiz-screen').classList.add('active');
+  }
+
+  // Render the current question
+  function renderQuestion() {
+    const q = questions[curIndex];
+    qTag.textContent = q.topic || 'Topic';
+    qNum.textContent = `Question ${curIndex + 1} of ${questions.length}`;
+    qText.textContent = q.q;
+    explanationEl.textContent = q.exp || '';
+    explanationEl.classList.remove('show');
+
+    // Build options
+    optionsWrap.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+    q.opts.forEach((optText, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.dataset.index = i;
+      btn.innerHTML = `<span class="letter">${letters[i] || String.fromCharCode(65 + i)}</span><div class="opt-text">${optText}</div>`;
+      btn.addEventListener('click', () => onSelectOption(i));
+      optionsWrap.appendChild(btn);
+    });
+
+    // If this question was previously answered/skipped, reflect that:
+    const resp = responses[curIndex];
+    if (resp && resp.status === 'answered' && resp.selected !== null) {
+      revealAnswerUI(resp.selected, true); // show previously selected result
+    } else if (resp && resp.status === 'skipped') {
+      // mark visually as skipped (no option highlighted)
+      explanationEl.classList.add('show'); // optionally show explanation for skipped: remove if undesired
     }
-    revHtml += '</div><div class="review-exp">' + q.exp + '</div></div>';
-  }
-  document.getElementById('review-section').innerHTML = revHtml;
-}
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('btn-set1').addEventListener('click', function() { startQuiz(1); });
-  document.getElementById('btn-set2').addEventListener('click', function() { startQuiz(2); });
-  document.getElementById('btn-set3').addEventListener('click', function() { startQuiz(3); });
-  document.getElementById('btn-prev').addEventListener('click', function() { goTo(current - 1); });
-  document.getElementById('btn-next').addEventListener('click', nextOrFinish);
-  document.getElementById('btn-home').addEventListener('click', goToStart);
-});
+    updateProgress();
+    updateNav();
+  }
+
+  // On selecting an option
+  function onSelectOption(selectedIndex) {
+    const q = questions[curIndex];
+    responses[curIndex] = { selected: selectedIndex, status: 'answered' };
+
+    revealAnswerUI(selectedIndex, false);
+    updateProgress();
+    updateNav();
+  }
+
+  // Reveal correct/wrong styling and show explanation
+  function revealAnswerUI(selectedIndex, fromHistory) {
+    const q = questions[curIndex];
+    const opts = Array.from(optionsWrap.querySelectorAll('.opt'));
+    opts.forEach((el, i) => {
+      el.classList.remove('correct', 'wrong');
+      el.disabled = true;
+      if (i === q.ans) {
+        el.classList.add('correct');
+      } else if (i === selectedIndex && i !== q.ans) {
+        el.classList.add('wrong');
+      }
+    });
+    explanationEl.classList.add('show');
+
+    // show Next button (it may already be visible)
+    btnNext.classList.add('show');
+  }
+
+  // Skip current question (mark skipped and move on)
+  function onSkip() {
+    responses[curIndex] = { selected: null, status: 'skipped' };
+    // optionally show explanation for skipped questions:
+    explanationEl.classList.add('show');
+    goToQuestion(curIndex + 1);
+  }
+
+  // Navigation: go to question index
+  function goToQuestion(index) {
+    if (index < 0) index = 0;
+    if (index >= questions.length) {
+      // reached end — submit / show results
+      finishQuiz();
+      return;
+    }
+    curIndex = index;
+    renderQuestion();
+  }
+
+  function onNext() {
+    goToQuestion(curIndex + 1);
+  }
+  function onPrev() {
+    goToQuestion(curIndex - 1);
+  }
+
+  // Finish quiz (placeholder — wire to your existing result logic)
+  function finishQuiz() {
+    // hide quiz screen and show result screen or call existing results function
+    // For integration, call your existing submission handler here.
+    console.log('Quiz finished. Responses:', responses);
+    // Example: show result screen if exists:
+    document.getElementById('quiz-screen').classList.remove('active');
+    document.getElementById('result-screen').classList.add('active');
+    // You may need to call any existing scoring/rendering function after this.
+  }
+
+  // Update navigation buttons state
+  function updateNav() {
+    btnPrev.disabled = (curIndex === 0);
+    // Next should always be available to move forward (even if unanswered), but we only highlight when there's an answer.
+    if (curIndex < questions.length - 1) {
+      btnNext.textContent = 'Next';
+    } else {
+      btnNext.textContent = 'Submit';
+    }
+
+    // Optionally show/hide Next visual class based on answered state:
+    const resp = responses[curIndex];
+    if (resp && resp.status === 'answered') {
+      btnNext.classList.add('show');
+    } else {
+      // still allow next, but not styled as primary until answered
+      btnNext.classList.remove('show');
+    }
+  }
+
+  // Update progress bar and label
+  function updateProgress() {
+    const answeredCount = responses.filter(r => r && r.status === 'answered').length;
+    const total = questions.length || 1;
+    const pct = Math.round(((curIndex) / total) * 100);
+    progressBar.style.width = `${Math.round((answeredCount / total) * 100)}%`;
+    progressLabel.textContent = `${answeredCount} / ${total}`;
+  }
+
+  // Attach button listeners
+  if (btnNext) btnNext.addEventListener('click', onNext);
+  if (btnPrev) btnPrev.addEventListener('click', onPrev);
+  if (btnSkip) btnSkip.addEventListener('click', onSkip);
+
+  // Expose startSet globally if other code calls it
+  window.startSet = startSet;
+
+  // Optionally auto-bind existing Start buttons that have ids like btn-set1
+  document.querySelectorAll('.btn-set').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // derive set id from button id if pattern btn-set{n} used
+      const idMatch = btn.id.match(/btn-set(\d+)/);
+      const sid = idMatch ? parseInt(idMatch[1], 10) : 1;
+      startSet(sid);
+    });
+  });
+
+})();
