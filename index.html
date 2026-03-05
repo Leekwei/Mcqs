@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gottingen MLS - Assessment Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#1e2530;--border:#30363d;--accent:#58a6ff;--accent2:#3fb950;--danger:#f85149;--warn:#d29922;--text:#e6edf3;--muted:#8b949e;--radius:10px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;line-height:1.6;}
+
+/* HEADER */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:10px;flex-wrap:wrap;}
+.header-left .title{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:var(--accent);}
+.header-left .sub{font-size:.65rem;color:var(--muted);}
+.set-badge{display:inline-block;font-size:.62rem;background:rgba(88,166,255,.15);color:var(--accent);border:1px solid rgba(88,166,255,.3);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle;}
+.header-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.timer-wrap{display:flex;align-items:center;gap:5px;}
+#timer{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--accent);letter-spacing:.05em;}
+.progress-wrap{display:flex;align-items:center;gap:7px;}
+.progress-bar-outer{width:90px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-bar-inner{height:100%;background:var(--accent);border-radius:99px;transition:width .3s ease;}
+.progress-label{font-size:.65rem;color:var(--muted);white-space:nowrap;}
+
+/* SCREENS */
+.screen{display:none;}.screen.active{display:block;}
+
+/* START */
+#start-screen{max-width:700px;margin:50px auto;padding:0 20px 60px;text-align:center;}
+.start-badge{display:inline-block;background:rgba(88,166,255,.12);color:var(--accent);border:1px solid rgba(88,166,255,.3);border-radius:99px;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;margin-bottom:18px;}
+#start-screen h1{font-family:'Syne',sans-serif;font-size:clamp(1.7rem,5vw,2.6rem);font-weight:800;line-height:1.1;margin-bottom:12px;}
+#start-screen h1 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent);}
+#start-screen > p{color:var(--muted);font-size:.82rem;margin-bottom:32px;max-width:480px;margin-inline:auto;}
+
+.set-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:36px;}
+.set-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:22px 20px;text-align:left;cursor:pointer;transition:border-color .2s,transform .15s,background .2s;position:relative;overflow:hidden;}
+.set-card:hover{border-color:var(--accent);background:rgba(88,166,255,.05);transform:translateY(-2px);}
+.set-card .set-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--accent);line-height:1;margin-bottom:6px;}
+.set-card .set-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--text);margin-bottom:8px;}
+.set-card .set-desc{font-size:.72rem;color:var(--muted);line-height:1.5;margin-bottom:16px;}
+.set-card .set-topics{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
+.set-card .set-topic-tag{font-size:.62rem;padding:2px 8px;border-radius:99px;border:1px solid var(--border);color:var(--muted);}
+.set-card .btn-set{width:100%;background:var(--accent);color:#0d1117;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;padding:10px;cursor:pointer;transition:opacity .15s;}
+.set-card .btn-set:hover{opacity:.85;}
+.set-card:nth-child(1) .set-num{color:var(--accent);}
+.set-card:nth-child(2) .set-num{color:var(--accent2);}
+.set-card:nth-child(2){border-color:rgba(63,185,80,.3);}
+.set-card:nth-child(2):hover{border-color:var(--accent2);background:rgba(63,185,80,.05);}
+.set-card:nth-child(2) .btn-set{background:var(--accent2);}
+.set-card:nth-child(3) .set-num{color:var(--warn);}
+.set-card:nth-child(3){border-color:rgba(210,153,34,.3);}
+.set-card:nth-child(3):hover{border-color:var(--warn);background:rgba(210,153,34,.05);}
+.set-card:nth-child(3) .btn-set{background:var(--warn);color:#0d1117;}
+
+.info-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-size:.72rem;color:var(--muted);text-align:center;}
+.info-box strong{display:block;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--text);margin-bottom:2px;}
+
+/* QUIZ */
+#quiz-screen{max-width:760px;margin:28px auto;padding:0 16px 80px;}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.q-tag{font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);background:rgba(88,166,255,.1);border:1px solid rgba(88,166,255,.2);border-radius:99px;padding:3px 10px;}
+.q-num{font-size:.7rem;color:var(--muted);}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 20px;margin-bottom:12px;}
+.q-text{font-family:'Instrument Serif',serif;font-size:1.12rem;line-height:1.55;margin-bottom:22px;color:var(--text);}
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:11px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);padding:11px 14px;cursor:pointer;transition:border-color .15s,background .15s;font-size:.83rem;line-height:1.5;text-align:left;width:100%;}
+.opt:hover:not([disabled]){border-color:var(--accent);background:rgba(88,166,255,.06);}
+.opt .letter{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--muted);min-width:16px;margin-top:1px;}
+.opt.correct{border-color:var(--accent2);background:rgba(63,185,80,.08);}
+.opt.correct .letter{color:var(--accent2);}
+.opt.wrong{border-color:var(--danger);background:rgba(248,81,73,.08);}
+.opt.wrong .letter{color:var(--danger);}
+.explanation{background:rgba(88,166,255,.07);border:1px solid rgba(88,166,255,.2);border-radius:var(--radius);padding:12px 14px;font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:10px;display:none;}
+.explanation.show{display:block;}
+.explanation strong{color:var(--accent);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
+.btn-nav{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:.78rem;padding:9px 18px;cursor:pointer;transition:border-color .15s;}
+.btn-nav:hover{border-color:var(--accent);}
+.btn-nav:disabled{opacity:.3;cursor:default;}
+.btn-next{background:var(--accent);color:#0d1117;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;padding:9px 20px;cursor:pointer;display:none;}
+.btn-next:hover{opacity:.85;}
+.btn-next.show{display:block;}
+
+/* RESULT */
+#result-screen{max-width:720px;margin:36px auto;padding:0 16px 80px;text-align:center;}
+#result-screen h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.9rem;margin-bottom:6px;}
+.score-ring{width:130px;height:130px;margin:20px auto;position:relative;}
+.score-ring svg{width:130px;height:130px;transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:9;}
+.ring-bg{stroke:var(--border);}
+.ring-fill{stroke:var(--accent2);stroke-linecap:round;transition:stroke-dashoffset 1s ease;}
+.score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-pct{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;}
+.score-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;}
+.result-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0;}
+.rb-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px;}
+.rb-box .val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;}
+.rb-box .lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.rb-box.green .val{color:var(--accent2);}.rb-box.red .val{color:var(--danger);}.rb-box.yellow .val{color:var(--warn);}
+.verdict{font-family:'Instrument Serif',serif;font-style:italic;font-size:1.05rem;color:var(--muted);margin-bottom:22px;}
+.result-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+.btn-home-res{background:transparent;border:1.5px solid var(--border);color:var(--muted);border-radius:var(--radius);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;padding:10px 24px;cursor:pointer;transition:border-color .15s,color .15s;}
+.btn-home-res:hover{border-color:var(--accent);color:var(--accent);}
+.topic-breakdown{text-align:left;margin-bottom:28px;}
+.topic-breakdown h3,.review-section h3{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;margin-bottom:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.tb-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:.76rem;}
+.tb-name{min-width:140px;color:var(--text);}
+.tb-bar-outer{flex:1;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.tb-bar-inner{height:100%;border-radius:99px;}
+.tb-frac{min-width:38px;text-align:right;color:var(--muted);}
+
+/* REVIEW */
+.review-section{text-align:left;}
+.review-item{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px;margin-bottom:10px;}
+.review-item.review-correct{border-left:3px solid var(--accent2);}
+.review-item.review-wrong{border-left:3px solid var(--danger);}
+.review-item.review-skip{border-left:3px solid var(--muted);}
+.review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.review-qnum{font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.review-status{font-size:.64rem;font-family:'Syne',sans-serif;font-weight:700;padding:2px 8px;border-radius:99px;}
+.review-correct .review-status{color:var(--accent2);background:rgba(63,185,80,.12);}
+.review-wrong .review-status{color:var(--danger);background:rgba(248,81,73,.12);}
+.review-skip .review-status{color:var(--muted);background:rgba(139,148,158,.12);}
+.review-question{font-family:'Instrument Serif',serif;font-size:.96rem;margin-bottom:10px;line-height:1.5;}
+.review-opts{display:flex;flex-direction:column;gap:4px;margin-bottom:9px;}
+.rev-opt{display:flex;align-items:flex-start;gap:7px;font-size:.75rem;padding:6px 10px;border-radius:6px;background:var(--surface2);color:var(--muted);}
+.rev-opt-correct{background:rgba(63,185,80,.1);color:var(--text);border:1px solid rgba(63,185,80,.3);}
+.rev-opt-wrong{background:rgba(248,81,73,.1);color:var(--text);border:1px solid rgba(248,81,73,.3);}
+.rev-letter{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;min-width:14px;}
+.review-exp{font-size:.76rem;color:var(--muted);line-height:1.6;padding-top:7px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div id="start-screen" class="screen active">
+  <div class="start-badge">University of Gottingen &middot; MSc Prep</div>
+  <h1>Molecular Life Sciences<br><em>Assessment Practice</em></h1>
+  <p>Choose a question set below. Each set contains 60 questions, shuffled on every attempt. 1-hour timer. Full review after submission.</p>
+
+  <div class="set-cards">
+    <div class="set-card">
+      <div class="set-num">01</div>
+      <div class="set-title">Foundations</div>
+      <div class="set-desc">Core microbiology, standard biotechnology techniques, and essential biochemistry pathways.</div>
+      <div class="set-topics">
+        <span class="set-topic-tag">Microbiology</span>
+        <span class="set-topic-tag">Biotechnology</span>
+        <span class="set-topic-tag">Biochemistry</span>
+      </div>
+      <button class="btn-set" id="btn-set1">Start Set 1 &rarr;</button>
+    </div>
+    <div class="set-card">
+      <div class="set-num">02</div>
+      <div class="set-title">Intermediate</div>
+      <div class="set-desc">Advanced microbial physiology, modern molecular techniques, and deeper biochemical mechanisms.</div>
+      <div class="set-topics">
+        <span class="set-topic-tag">Microbiology</span>
+        <span class="set-topic-tag">Biotechnology</span>
+        <span class="set-topic-tag">Biochemistry</span>
+      </div>
+      <button class="btn-set" id="btn-set2">Start Set 2 &rarr;</button>
+    </div>
+    <div class="set-card">
+      <div class="set-num">03</div>
+      <div class="set-title">Advanced</div>
+      <div class="set-desc">Research-level microbiology, cutting-edge biotech tools, and advanced biochemical regulation.</div>
+      <div class="set-topics">
+        <span class="set-topic-tag">Microbiology</span>
+        <span class="set-topic-tag">Biotechnology</span>
+        <span class="set-topic-tag">Biochemistry</span>
+      </div>
+      <button class="btn-set" id="btn-set3">Start Set 3 &rarr;</button>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-box"><strong>60</strong>Questions per set</div>
+    <div class="info-box"><strong>1 hr</strong>Time limit</div>
+    <div class="info-box"><strong>180</strong>Total questions</div>
+    <div class="info-box"><strong>Shuffled</strong>Every attempt</div>
+  </div>
+</div>
+
+<!-- HEADER (quiz only) -->
+<div class="header" id="quiz-header" style="display:none">
+  <div class="header-left">
+    <div class="title">MLS Assessment Prep <span class="set-badge" id="set-badge">Set 1</span></div>
+    <div class="sub">University of Gottingen</div>
+  </div>
+  <div class="header-right">
+    <div class="timer-wrap">
+      <span>&#9201;</span>
+      <span id="timer">01:00:00</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar" style="width:0%"></div></div>
+      <div class="progress-label" id="progress-label">0 / 60</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quiz-screen" class="screen">
+  <div class="q-meta">
+    <span class="q-tag" id="q-tag">Topic</span>
+    <span class="q-num" id="q-num">Question 1 of 60</span>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="explanation" id="explanation"></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev" disabled>&larr; Prev</button>
+    <button class="btn-next" id="btn-next">Next</button>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result-screen" class="screen">
+  <h2 id="result-title">Assessment Complete</h2>
+  <div class="score-ring">
+    <svg viewBox="0 0 130 130">
+      <circle class="ring-bg" cx="65" cy="65" r="55"/>
+      <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="55" stroke-dasharray="345.4" stroke-dashoffset="345.4"/>
+    </svg>
+    <div class="score-center">
+      <div class="score-pct" id="score-pct">0%</div>
+      <div class="score-lbl">Score</div>
+    </div>
+  </div>
+  <p class="verdict" id="verdict"></p>
+  <div class="result-breakdown">
+    <div class="rb-box green"><div class="val" id="res-correct">0</div><div class="lbl">Correct</div></div>
+    <div class="rb-box red"><div class="val" id="res-wrong">0</div><div class="lbl">Wrong</div></div>
+    <div class="rb-box yellow"><div class="val" id="res-skip">0</div><div class="lbl">Skipped</div></div>
+  </div>
+  <div class="result-btns">
+    <button class="btn-home-res" id="btn-home">&#8592; Choose Another Set</button>
+  </div>
+  <div class="topic-breakdown" id="topic-breakdown"></div>
+  <div class="review-section" id="review-section"></div>
+</div>
+
+<script src="quiz.js"></script>
+</body>
+</html>
