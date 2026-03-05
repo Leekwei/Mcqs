@@ -10,16 +10,125 @@ var SETS = {
     {topic:"Microbiology",q:"In binary fission, the FtsZ protein forms:",opts:["The nucleoid region","A Z-ring at mid-cell that constricts during division","The replication fork","Flagellar motor complexes"],ans:1,exp:"FtsZ is a GTPase homologous to eukaryotic tubulin. It polymerises into a Z-ring at the cell midpoint, recruits the divisome, and provides constriction force during prokaryotic cell division."},
     {topic:"Microbiology",q:"Bacterial transformation refers to:",opts:["Transfer of DNA via a phage vector","Uptake of naked exogenous DNA from the environment","Exchange of DNA through a pilus","Insertion of a transposon into the genome"],ans:1,exp:"Bacterial transformation involves uptake and incorporation of naked environmental DNA. Naturally competent bacteria such as Streptococcus pneumoniae have specific machinery for this process."},
     {topic:"Microbiology",q:"The TCA cycle yields which combination of electron carriers per acetyl-CoA?",opts:["2 NADH, 1 FADH2, 1 GTP","3 NADH, 1 FADH2, 1 GTP","3 NADH, 2 FADH2, 1 GTP","2 NADH, 2 FADH2, 2 GTP"],ans:1,exp:"One turn of the TCA cycle yields 3 NADH, 1 FADH2, and 1 GTP, along with release of 2 CO2 molecules per acetyl-CoA oxidised."},
-    {topic:"Microbiology",q:"Fermentation reactions in bacteria occur in:",opts:["Mitochondria","Periplasmic space","Cytoplasm","Outer membrane"],ans:2,exp:"Bacteria lack mitochondria. Fermentation and glycolytic reactions of anaerobic respiration occur in the cytoplasm. The electron transport chain is located in the plasma membrane."},
-    {topic:"Microbiology",q:"Endospore heat resistance is primarily due to:",opts:["High lipid content","Dipicolinic acid complexed with Ca2+ chelating water","Absence of peptidoglycan","Thicker outer membrane"],ans:1,exp:"Endospores accumulate dipicolinic acid (DPA) complexed with Ca2+, replacing most core water and stabilising DNA and proteins, conferring extreme heat resistance."},
-    {topic:"Microbiology",q:"Gene transfer via a sex pilus between bacteria is called:",opts:["Transformation","Transduction","Conjugation","Recombination"],ans:2,exp:"Conjugation requires direct cell-to-cell contact mediated by a sex pilus encoded on the F plasmid. ssDNA is transferred from donor to recipient through the mating bridge."},
-    {topic:"Microbiology",q:"The most abundant RNA type in a bacterial cell is:",opts:["mRNA","tRNA","rRNA","snRNA"],ans:2,exp:"Ribosomal RNA (rRNA) constitutes about 80% of total cellular RNA. It is the structural and catalytic component of ribosomes, comprising 5S, 16S, and 23S species in prokaryotes."},
-    {topic:"Microbiology",q:"Why is 16S rRNA used for microbial phylogenetics?",opts:["It encodes a cell wall protein","It is conserved yet contains variable regions for species identification","It is the largest bacterial gene","It is found only in pathogens"],ans:1,exp:"The 16S rRNA gene has conserved regions for universal PCR primers flanking hypervariable regions (V1-V9) that differ between species, making it ideal for phylogenetic classification."},
-    {topic:"Microbiology",q:"Beta-lactam antibiotics work by:",opts:["Blocking the 30S ribosomal subunit","Inhibiting cell wall transpeptidases (PBPs)","Disrupting the outer membrane","Inhibiting DNA gyrase"],ans:1,exp:"Beta-lactams mimic the D-Ala-D-Ala terminus of peptidoglycan precursors and irreversibly acylate penicillin-binding proteins (PBPs), preventing cross-linking of peptidoglycan strands."},
-    {topic:"Microbiology",q:"Which enzyme catalyses N2 reduction to NH3 in nitrogen fixation?",opts:["Glutamine synthetase","Nitrogenase","Urease","Nitrate reductase"],ans:1,exp:"Nitrogenase catalyses the ATP-dependent reduction of N2 to NH3. It is extremely oxygen-sensitive and found in diazotrophs such as Rhizobium and Azotobacter."},
-    {topic:"Microbiology",q:"A biofilm is best described as:",opts:["A suspension of planktonic bacteria","A structured microbial community embedded in self-produced extracellular matrix","A single-species colony on solid agar","Bacteria attached to red blood cell surfaces"],ans:1,exp:"Biofilms are structured communities of microorganisms irreversibly attached to a surface and embedded in an extracellular polymeric substance (EPS) matrix. They exhibit increased antibiotic resistance."},
-    {topic:"Microbiology",q:"The lac operon is induced by:",opts:["Glucose","Allolactose (derived from lactose)","cAMP directly","The Lac repressor"],ans:1,exp:"Allolactose, formed from lactose by residual beta-galactosidase, binds the Lac repressor and causes it to dissociate from the operator, allowing transcription of lac genes."},
-    {topic:"Microbiology",q:"Positive-sense ssRNA viruses are directly translated because:",opts:["Their RNA is double stranded","Their genome functions directly as mRNA","They encode their own ribosomes","They integrate into the host genome first"],ans:1,exp:"Positive-sense ssRNA viruses such as poliovirus and SARS-CoV-2 have genomes that function directly as mRNA, allowing immediate translation by host ribosomes upon cell entry."},
+   { topic:"Transcription", 
+q:"What is the main function of RNA polymerase during transcription?",
+opts:[
+"Translate mRNA into protein",
+"Synthesize RNA using DNA as a template",
+"Break down RNA molecules",
+"Attach amino acids to tRNA"
+],
+ans:1,
+exp:"RNA polymerase reads the DNA template strand and synthesizes a complementary RNA strand."
+},
+
+{ topic:"RNA Types",
+q:"Which RNA molecule carries amino acids to the ribosome during protein synthesis?",
+opts:[
+"mRNA",
+"rRNA",
+"tRNA",
+"snRNA"
+],
+ans:2,
+exp:"Transfer RNA (tRNA) transports specific amino acids to the ribosome during translation."
+},
+
+{ topic:"Central Dogma",
+q:"The central dogma of molecular biology describes the flow of genetic information as:",
+opts:[
+"DNA → Protein → RNA",
+"RNA → DNA → Protein",
+"DNA → RNA → Protein",
+"Protein → RNA → DNA"
+],
+ans:2,
+exp:"Genetic information flows from DNA to RNA (transcription) and RNA to protein (translation)."
+},
+
+{ topic:"Translation",
+q:"Where does translation occur in the cell?",
+opts:[
+"Nucleus",
+"Ribosome",
+"Mitochondria",
+"Golgi apparatus"
+],
+ans:1,
+exp:"Protein synthesis occurs at ribosomes in the cytoplasm."
+},
+
+{ topic:"RNA Structure",
+q:"Which nitrogenous base is found in RNA but not in DNA?",
+opts:[
+"Adenine",
+"Guanine",
+"Uracil",
+"Cytosine"
+],
+ans:2,
+exp:"Uracil replaces thymine in RNA."
+},
+
+{ topic:"Codons",
+q:"A codon consists of how many nucleotides?",
+opts:[
+1",
+2",
+3",
+4"
+],
+ans:2,
+exp:"Each codon is a triplet of nucleotides that codes for one amino acid."
+},
+
+{ topic:"Protein Synthesis",
+q:"Which molecule contains the instructions for assembling amino acids into proteins?",
+opts:[
+"mRNA",
+"tRNA",
+"rRNA",
+"DNA polymerase"
+],
+ans:0,
+exp:"Messenger RNA carries genetic instructions from DNA to the ribosome."
+},
+
+{ topic:"Protein Types",
+q:"Which type of protein primarily speeds up biochemical reactions?",
+opts:[
+"Structural proteins",
+"Transport proteins",
+"Enzymes",
+"Antibodies"
+],
+ans:2,
+exp:"Enzymes act as biological catalysts."
+},
+
+{ topic:"Ribosomes",
+q:"Ribosomes are mainly composed of:",
+opts:[
+"DNA and lipids",
+"RNA and proteins",
+"Carbohydrates",
+"Phospholipids"
+],
+ans:1,
+exp:"Ribosomes consist primarily of ribosomal RNA (rRNA) and proteins."
+},
+
+{ topic:"Gene Expression",
+q:"Which process converts RNA information into a sequence of amino acids?",
+opts:[
+"Replication",
+"Transcription",
+"Translation",
+"Mutation"
+],
+ans:2,
+exp:"Translation converts mRNA codons into a chain of amino acids."
+},
     {topic:"Microbiology",q:"Chemotaxis in bacteria refers to:",opts:["Quorum sensing response to density","Directed movement along chemical gradients","Light-dependent swimming","Movement along magnetic field lines"],ans:1,exp:"Chemotaxis is the directed movement of bacteria in response to chemical gradients. Attractants suppress tumbling, resulting in smooth runs toward them; repellents increase tumbling."},
     {topic:"Biotechnology",q:"Restriction endonucleases are used in recombinant DNA technology to:",opts:["Amplify DNA sequences","Cut DNA at specific palindromic sequences","Join DNA fragments","Remove RNA primers"],ans:1,exp:"Type II restriction endonucleases recognise specific palindromic sequences and cleave both strands, generating defined fragments with blunt or cohesive ends suitable for cloning."},
     {topic:"Biotechnology",q:"PCR requires which set of components?",opts:["RNA template, reverse transcriptase, dNTPs","DNA template, two primers, thermostable polymerase, dNTPs","DNA template, one primer, RNA polymerase","Restriction enzymes and ligase"],ans:1,exp:"Standard PCR requires a DNA template, a forward and reverse primer, a thermostable polymerase (e.g. Taq), dNTPs, and buffer. Cycling through denaturation, annealing, and extension amplifies the target exponentially."},
@@ -110,16 +219,125 @@ var SETS = {
     {topic:"Biochemistry",q:"Gluconeogenesis is activated when:",opts:["Blood glucose is high","Insulin levels are high","Glucagon is elevated and AMP/NAD+ ratios are high","Fructose-2,6-bisphosphate is elevated"],ans:2,exp:"Gluconeogenesis is activated during fasting/hypoglycaemia when glucagon rises, cAMP increases, and the energy charge is low (high AMP/ADP, high NAD+/NADH). Glucagon phosphorylates and inactivates PFK-2, reducing F2,6BP and relieving inhibition of PEPCK and FBPase."},
     {topic:"Biochemistry",q:"What is the Warburg effect?",opts:["Increased oxidative phosphorylation in cancer cells","Preferential use of aerobic glycolysis over oxidative phosphorylation in cancer cells even in the presence of oxygen","Inhibition of the TCA cycle by high ATP","Increased fatty acid oxidation in tumours"],ans:1,exp:"The Warburg effect describes the observation that cancer cells preferentially use aerobic glycolysis (glucose to lactate) even when oxygen is available, producing less ATP per glucose but providing biosynthetic intermediates for rapid proliferation."},
     {topic:"Biochemistry",q:"Protein N-glycosylation in eukaryotes begins in:",opts:["The cytoplasm on free ribosomes","The endoplasmic reticulum (ER) lumen co-translationally","The Golgi apparatus","The nucleus"],ans:1,exp:"N-glycosylation begins co-translationally in the ER lumen, where an oligosaccharyltransferase (OST) transfers a pre-assembled 14-sugar oligosaccharide (Glc3Man9GlcNAc2) en bloc from dolichol-PP to Asn residues in N-X-S/T sequons."},
-    {topic:"Biochemistry",q:"The role of NADPH in biosynthesis is:",opts:["Energy carrier for ATP synthesis","Reductive biosynthesis (fatty acid and sterol synthesis) and antioxidant defence","Electron donor for the ETC","Cofactor for glycolytic enzymes only"],ans:1,exp:"NADPH is the primary reductant for anabolic reactions including fatty acid synthesis, sterol synthesis, and the regeneration of reduced glutathione (GSH) for antioxidant defence. It is produced mainly by the pentose phosphate pathway and malic enzyme."},
-    {topic:"Biochemistry",q:"How does aspirin inhibit COX enzymes?",opts:["Competitive reversible inhibition","Irreversible acetylation of a serine residue in the active site","Allosteric inhibition","Non-competitive inhibition"],ans:1,exp:"Aspirin (acetylsalicylic acid) irreversibly acetylates Ser530 of COX-1 and Ser516 of COX-2, blocking access of arachidonic acid to the active site. This prevents prostaglandin and thromboxane synthesis."},
-    {topic:"Biochemistry",q:"Calnexin in the ER acts as a chaperone for:",opts:["All cytoplasmic proteins","Newly synthesised glycoproteins, ensuring correct folding before secretion","Only mitochondrial proteins","DNA repair enzymes"],ans:1,exp:"Calnexin (membrane-bound) and calreticulin (soluble) are lectin chaperones in the ER that bind transiently to monoglucosylated N-glycans on newly synthesised glycoproteins, retaining misfolded proteins for refolding or ERAD."},
-    {topic:"Biochemistry",q:"The enzyme that converts angiotensin I to angiotensin II is:",opts:["Renin","Angiotensin-converting enzyme (ACE)","Aldosterone synthase","Cathepsin D"],ans:1,exp:"ACE (a zinc metalloprotease on vascular endothelial cells) cleaves the C-terminal dipeptide from angiotensin I (10 aa) to produce angiotensin II (8 aa), a potent vasoconstrictor and regulator of aldosterone secretion."},
-    {topic:"Biochemistry",q:"Which statement about enzyme competitive inhibition is correct?",opts:["Vmax is reduced; Km is unchanged","Vmax is unchanged; apparent Km is increased","Both Vmax and Km are reduced","Vmax is increased; Km is reduced"],ans:1,exp:"A competitive inhibitor competes with substrate for the active site. It can be overcome by increasing substrate concentration, so Vmax is unchanged. However, the apparent Km increases, reflecting reduced apparent affinity for substrate."},
-    {topic:"Biochemistry",q:"The role of GTP in signal transduction via G proteins is:",opts:["Direct phosphorylation of target proteins","Binding to Galpha subunit to activate it; hydrolysis to GDP inactivates it","Allosteric activation of adenylyl cyclase directly","Scaffolding the G protein complex"],ans:1,exp:"G protein activation: ligand-bound GPCR promotes GDP/GTP exchange on Galpha, releasing Gbeta-gamma. Active Galpha-GTP stimulates effectors (e.g. adenylyl cyclase). The intrinsic GTPase activity of Galpha hydrolyses GTP to GDP, returning the system to its inactive state."},
-    {topic:"Biochemistry",q:"Iron-sulfur clusters in mitochondrial proteins primarily function as:",opts:["Structural scaffolds only","Electron carriers in the electron transport chain","Haem synthesis intermediates","ATP-binding cofactors"],ans:1,exp:"Iron-sulfur (Fe-S) clusters are prosthetic groups that function as single-electron carriers in the ETC. They are found in Complexes I, II, and III, and in many other redox enzymes. Fe-S biogenesis in the mitochondrial matrix is essential for ETC function."},
-    {topic:"Biochemistry",q:"The amphipathic helix in apolipoproteins allows them to:",opts:["Catalyse lipid hydrolysis","Interact simultaneously with the hydrophobic lipid core and the aqueous surface of lipoproteins","Cross the blood-brain barrier","Form transmembrane channels"],ans:1,exp:"Amphipathic helices have hydrophobic residues on one face and hydrophilic residues on the other. In apolipoproteins, this allows them to sit at the lipoprotein surface, with the hydrophobic face buried in the lipid core and the hydrophilic face exposed to plasma."},
-    {topic:"Biochemistry",q:"Selenocysteine is incorporated into proteins by:",opts:["Standard genetic code reading of UGA as a stop codon","Recoding of UGA stop codon by a specific tRNA (Sec-tRNA) with a SECIS element in the mRNA","Post-translational modification of serine","Chemical synthesis only"],ans:1,exp:"Selenocysteine (the 21st amino acid) is encoded by UGA, normally a stop codon. A SECIS (SElenoCysteine Insertion Sequence) element in the mRNA 3'UTR, together with dedicated elongation factor SelB and Sec-tRNA[Sec], directs ribosome recoding to insert selenocysteine."},
-    {topic:"Biochemistry",q:"The terminal enzyme in the purine biosynthesis pathway that closes the imidazole ring is:",opts:["PRPP amidotransferase","FGAR amidotransferase (PFAS)","SAICAR synthetase","AIRS (5-aminoimidazole ribonucleotide synthetase)"],ans:3,exp:"AIRS catalyses ATP-dependent ring closure to form 5-aminoimidazole ribonucleotide (AIR), closing the imidazole ring in the de novo purine biosynthesis pathway. This is step 5 of the 10-step pathway from PRPP to IMP."},
+   { topic:"Electron Transfer",
+q:"Oxidation is defined as:",
+opts:[
+"Gain of electrons",
+"Loss of electrons",
+"Gain of protons",
+"Loss of neutrons"
+],
+ans:1,
+exp:"Oxidation involves the loss of electrons."
+},
+
+{ topic:"Electron Transfer",
+q:"Reduction is defined as:",
+opts:[
+"Loss of electrons",
+"Gain of electrons",
+"Loss of atoms",
+"Gain of energy"
+],
+ans:1,
+exp:"Reduction involves gaining electrons."
+},
+
+{ topic:"Chemical Bonds",
+q:"Which bond involves the sharing of electrons between atoms?",
+opts:[
+"Ionic bond",
+"Covalent bond",
+"Hydrogen bond",
+"Van der Waals interaction"
+],
+ans:1,
+exp:"Covalent bonds form when atoms share electron pairs."
+},
+
+{ topic:"Ionic Interaction",
+q:"An ionic bond is formed when:",
+opts:[
+"Atoms share electrons equally",
+"Electrons are transferred from one atom to another",
+"Atoms share protons",
+"Neutrons move between atoms"
+],
+ans:1,
+exp:"Ionic bonds form through electron transfer creating charged ions."
+},
+
+{ topic:"Hydrogen Bonds",
+q:"Hydrogen bonds commonly occur between hydrogen and which atom?",
+opts:[
+"Carbon",
+"Oxygen",
+"Sodium",
+"Iron"
+],
+ans:1,
+exp:"Hydrogen bonds form between hydrogen and electronegative atoms like oxygen or nitrogen."
+},
+
+{ topic:"Electronegativity",
+q:"Electronegativity refers to:",
+opts:[
+"An atom's ability to attract electrons",
+"An atom's mass",
+"The number of protons",
+"The number of neutrons"
+],
+ans:0,
+exp:"Electronegativity measures how strongly an atom attracts electrons in a bond."
+},
+
+{ topic:"ATP",
+q:"ATP stores energy mainly in:",
+opts:[
+"Ionic bonds",
+"Hydrogen bonds",
+"Phosphate bonds",
+"Peptide bonds"
+],
+ans:2,
+exp:"Energy is stored in the high-energy phosphate bonds of ATP."
+},
+
+{ topic:"pH Chemistry",
+q:"A solution with pH 3 is considered:",
+opts:[
+"Neutral",
+"Basic",
+"Acidic",
+"Alkaline buffer"
+],
+ans:2,
+exp:"pH values below 7 indicate acidic solutions."
+},
+
+{ topic:"Molecular Interaction",
+q:"Van der Waals forces are best described as:",
+opts:[
+"Strong covalent bonds",
+"Weak attractions between molecules",
+"Electron transfer reactions",
+"Permanent ionic interactions"
+],
+ans:1,
+exp:"Van der Waals forces are weak intermolecular attractions."
+},
+
+{ topic:"Redox Reactions",
+q:"In a redox reaction, the substance that gains electrons is:",
+opts:[
+"Oxidized",
+"Reduced",
+"Neutralized",
+"Ionized"
+],
+ans:1,
+exp:"Reduction means gaining electrons."
+},
     {topic:"Biochemistry",q:"Type I collagen is stabilised by:",opts:["Disulfide bonds between alpha chains","Covalent lysine/hydroxylysine-derived cross-links and extensive hydrogen bonding in the triple helix","Ionic interactions between Gly residues","Only hydrophobic interactions in the fibril"],ans:1,exp:"Type I collagen triple helix stability comes from the Gly-X-Y repeat (where X is often Pro and Y is often hydroxyPro), extensive inter-chain hydrogen bonds, and covalent cross-links formed by lysyl oxidase-mediated oxidation of Lys/HylLys residues."},
     {topic:"Biochemistry",q:"Protein degradation by the 26S proteasome is triggered by:",opts:["SUMOylation","K48-linked polyubiquitylation","Neddylation","Acetylation"],ans:1,exp:"K48-linked polyubiquitin chains act as a degradation signal recognised by the 26S proteasome. The E1-E2-E3 ubiquitin-ligase cascade covalently attaches ubiquitin to target lysines."},
     {topic:"Biochemistry",q:"The oxidative phase of the pentose phosphate pathway produces:",opts:["ATP, NADH, and lactate","NADPH, CO2, and ribose-5-phosphate","FADH2 and acetyl-CoA","GTP and oxaloacetate"],ans:1,exp:"The oxidative PPP phase converts glucose-6-phosphate to ribulose-5-phosphate, generating 2 NADPH and CO2. Ribose-5-phosphate for nucleotide synthesis is generated in the non-oxidative phase."},
